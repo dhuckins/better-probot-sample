@@ -2,13 +2,21 @@
  * This is the main entrypoint to your Probot app
  * @param {import('probot').Application} app
  */
-module.exports = app => {
+module.exports = (app) => {
   // Your code here
   app.log('Yay, the app was loaded!')
 
-  app.on('issues.opened', async context => {
+  app.on('issues.opened', (context) => {
+    app.log.info('issue opened!')
     const issueComment = context.issue({ body: 'Thanks for opening this issue!' })
     return context.github.issues.createComment(issueComment)
+  })
+
+  app.on('*', (context) => {
+    context.log.info({
+      event: context.event,
+      action: context.payload.action
+    })
   })
 
   // For more information on building apps:
